@@ -2,21 +2,21 @@ import java.sql.*;
 
 public class ConnectorMySQLDB {
 
-    private String  dbMySQL = "jdbc:mysql://localhost/Ejemplo",
-                    user = "admin",
-                    password = "";
+    private String  hostName= "localhost",
+                    port = "3306",
+                    database = "Postres",
+
+                    url = "jdbc:mysql://"+hostName+":"+port+"/"+database,
+                    user = "root",
+                    password = "admin";
 
     public ConnectorMySQLDB(){
-
         try{
-         //indicamos el driver y lo instanciamos
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            //creamos la conexion DB , user , password
-            Connection conn = DriverManager.getConnection(dbMySQL, user, password);
-
-            if ( conn != null ){//se revisa si la conexión fue satisfactoria
+            Connection conn = DriverManager.getConnection(url, user, password);
+            if ( conn != null ){
                 System.out.println("Conexión satisfactoria");
-                conn.close();//se cierra la conexión
+                conn.close();
             }
         }catch( SQLTimeoutException e ){
             System.out.println(e.getMessage());
