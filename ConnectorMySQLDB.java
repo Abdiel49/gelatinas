@@ -2,32 +2,26 @@ import java.sql.*;
 
 public class ConnectorMySQLDB {
 
-    private String  hostName= "localhost",
-                    port = "3306",
-                    database = "Postres",
-
-                    url = "jdbc:mysql://"+hostName+":"+port+"/"+database,
-                    user = "root",
-                    password = "admin";
+/*
 
     public ConnectorMySQLDB(){
+        sms("se intentara conectar a la base datos");
         try{
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            sms("intentando conectarce mysql");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection(url, user, password);
             if ( conn != null ){
-                System.out.println("Conexión satisfactoria");
-                conn.close();
+                sms("Conexión satisfactoria");
             }
         }catch( SQLTimeoutException e ){
             System.out.println(e.getMessage());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
+
+    private void sms(String cad){   System.out.println(cad); }
+*/
 }
