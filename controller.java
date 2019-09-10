@@ -15,18 +15,22 @@ public class controller {
 
     public Connection getConnector(){
         if(conn==null){
-            sms("se intentara conectar a la base datos");
+            sms("estas intentando entrar a su base de datos");
             try{
-                sms("intentando conectarce mysql");
+                sms("estas tan cerca de entrar a su corazon, vamos campeon tu puedes!!");
                 Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection(url, user, password);
-                if ( conn != null )     sms("Conexión satisfactoria");
+                if ( conn != null )     sms("Felicidades conseguiste una coneccion estable con ella :)");
+                else sms("raioz, diste lo mejor de ti pero aun asi no fue suficiente para ella, intenta en otro momento");
             }catch( SQLTimeoutException e ){
-                System.out.println(e.getMessage());
+                e.getMessage();
+                sms("Lo siento hermano, ella esta ocupada siendo feliz con otro");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+                sms("Lo siemto, lo que buscas no lo puedes encontrar");
             } catch (SQLException e) {
                 e.printStackTrace();
+                sms("ELLA DIJO NO!");
             }
         }
         return conn;
@@ -34,36 +38,55 @@ public class controller {
 
     public void insert (Connection conn, String postre){
         try {
-            query = "INSERT INTO " + this.table + "(nom) VALUES('"+postre+"');";
-            //if(!exists(conn, postre)) {
+            if(!exists(conn, postre)) {
+                sms("tigreee! xD");
+                query = "INSERT INTO " + this.table + "(nom) VALUES('"+postre+"');";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.execute();
-            //}
-
+                sms("buen trabajo campeon, eres una maquina");
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }
     }
-    // SELECT nom FROM postres P WHERE p.nom = ?
+
     private boolean exists(Connection conn, String postre) throws SQLException {
         boolean resp = false;
         String nomPostre;
         try{
-            PreparedStatement query = conn.prepareStatement("SELECT nom FROM "+this.table+" p WHERE p.nom = ?");
-            query.setString(1, postre);
-
-            ResultSet resultado = query.executeQuery();
-            System.out.println(resultado.toString());
-
-            nomPostre = resultado.getString("nom");
-            System.out.println(nomPostre);
-             if (nomPostre != "" || nomPostre != null) { resp = true;}
-
+            query = "SELECT nom FROM "+this.table+" WHERE nom = '"+postre+"';";
+            Statement st = conn.createStatement();
+            ResultSet rest = st.executeQuery(query);
+            //sms(rest.toString());
+            while(rest.next()){
+                nomPostre = rest.getString("nom");
+                if (!nomPostre.equals("")) {
+                    resp = true;
+                    sms("no puedes avanzar al siguiente nivel porque ya hay otro en su vida");
+                    break;
+                }
+            }
+            st.close();
         }catch(SQLException ex){
+            sms("Le duele la cabeza, o sea ahora no");// pd. en este punto ya dejo de ser gracioso :'(
             throw new SQLException(ex);
+        }finally {
+            return resp;
         }
-        return resp;
+    }
+
+    public void close() {
+        if (conn != null) {
+            try {
+                conn.close(); // y desde aqui comenzo todo y me fui a la cima xD
+                sms("la coneccion con la base de datos termino, asi como ella termino contigo :'( ");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                sms("no pudiste cerrar la coneccion, pero ella si y ya es feliz con otro alv que sad");
+            }
+        }
     }
 
     private void sms(String cad){   System.out.println(cad); }
+
 }
